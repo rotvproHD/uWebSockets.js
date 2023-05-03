@@ -1,6 +1,6 @@
 {
-  "name": "uWebSockets.js",
-  "version": "20.24.0",
+  "name": "@rjweb/uws",
+  "version": "1.0.0",
   "main": "uws.js",
   "types": "./index.d.ts",
   "exports": {
