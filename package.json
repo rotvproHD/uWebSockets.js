@@ -1,8 +1,13 @@
 {
   "name": "@rjweb/uws",
+  "private": false,
   "version": "1.0.0",
   "main": "uws.js",
   "types": "./index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rotvproHD/uWebSockets.js.git"
+  },
   "exports": {
     "import": "./ESM_wrapper.mjs",
     "require": "./uws.js",
