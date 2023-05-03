@@ -43,7 +43,7 @@ struct HttpRequestWrapper {
 
     /* Takes function of string, string. Returns this (doesn't really but should) */
     template <int QUIC>
-    static void req_forEach(const FunctionCallbackInfo<Value> &args) {
+    static void req_forEachHeader(const FunctionCallbackInfo<Value> &args) {
         Isolate *isolate = args.GetIsolate();
         auto *req = getHttpRequest<QUIC>(args);
         if (req) {
@@ -183,7 +183,7 @@ struct HttpRequestWrapper {
             reqTemplateLocal->PrototypeTemplate()->Set(String::NewFromUtf8(isolate, "getMethod", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, req_getMethod<QUIC>));
             reqTemplateLocal->PrototypeTemplate()->Set(String::NewFromUtf8(isolate, "getCaseSensitiveMethod", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, req_getCaseSensitiveMethod<QUIC>));
             reqTemplateLocal->PrototypeTemplate()->Set(String::NewFromUtf8(isolate, "getQuery", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, req_getQuery<QUIC>));
-            reqTemplateLocal->PrototypeTemplate()->Set(String::NewFromUtf8(isolate, "forEach", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, req_forEach<QUIC>));
+            reqTemplateLocal->PrototypeTemplate()->Set(String::NewFromUtf8(isolate, "forEachHeader", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, req_forEachHeader<QUIC>));
             reqTemplateLocal->PrototypeTemplate()->Set(String::NewFromUtf8(isolate, "setYield", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, req_setYield<QUIC>));
         }
 
