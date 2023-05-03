@@ -34,9 +34,10 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ${{ github.job }}-${{ matrix.os }}
-          cmakeAppendedArgs: "-DCMAKE_BUILD_TYPE=${{ matrix.type }} -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache"
       - name: Update binaries
         run: |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+
           sudo xcode-select -switch /Applications/Xcode_12.2.app || true
           sudo apt update || true
           sudo apt install -y g++-aarch64-linux-gnu build-essential cmake libz-dev golang curl libunwind-dev clang || true
@@ -69,7 +70,6 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ${{ github.job }}-${{ matrix.os }}
-          cmakeAppendedArgs: "-DCMAKE_BUILD_TYPE=${{ matrix.type }} -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache"
       - name: Clone
         run: git clone --recursive https://github.com/rotvproHD/uWebSockets.js.git
       - uses: uraimo/run-on-arch-action@v2.3.0
@@ -83,6 +83,8 @@ jobs:
             apt-get update -q -y
             apt-get install -q -y build-essential cmake libz-dev golang curl libunwind-dev clang
           run: |
+            export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+            
             cd /repository
             make
       - name: Update binaries
