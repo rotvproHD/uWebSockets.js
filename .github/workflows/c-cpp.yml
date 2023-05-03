@@ -23,7 +23,7 @@ jobs:
           git config --global user.email "rjansengd@gmail.com"
           git config --global user.name "Robert Jansen"
           git commit -a -m "[GitHub Actions] Updated windows-latest binaries"
-          git push "https://rovtvproHD:${{ secrets.SECRET }}@github.com/rotvproHD/uWebSockets.js" binaries
+          git push "https://rotvproHD:${{ secrets.SECRET }}@github.com/rotvproHD/uWebSockets.js" binaries
   build-unix:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -101,4 +101,4 @@ jobs:
           git config --global user.name "Robert Jansen"
           git add *.node *.js
           git commit -a -m "[GitHub Actions] Updated linux-${{ matrix.arch }} binaries" || true
-          git push "https://rovtvproHD:${{ secrets.SECRET }}@github.com/rotvproHD/uWebSockets.js" binaries
+          git push "https://rotvproHD:${{ secrets.SECRET }}@github.com/rotvproHD/uWebSockets.js" binaries
