@@ -16,7 +16,7 @@
 
 ```javascript
 /* Non-SSL is simply App() */
-require('uWebSockets.js').SSLApp({
+require('@rjweb/uws').SSLApp({
 
   /* There are more SSL options, cut for brevity */
   key_file_name: 'misc/key.pem',

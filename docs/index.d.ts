@@ -217,7 +217,7 @@ export interface HttpRequest {
     /** Returns the raw querystring (the part of URL after ? sign) or empty string. */
     getQuery() : string;
     /** Returns a decoded query parameter value or empty string. */
-    getQuery(key?: string) : string;
+    getQuery(key: string) : string;
     /** Loops over all headers. */
     forEachHeader(cb: (key: string, value: string) => void) : void;
     /** Setting yield to true is to say that this route handler did not handle the route, causing the router to continue looking for a matching route handler, or fail. */
