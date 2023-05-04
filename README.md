@@ -1,6 +1,8 @@
-# uWebSockets.js precompiled binaries
-Automatically built from source by GitHub Actions.
+<div align="center">
 
-## Clarification of license
+  [<img src="https://img.rjansen.de/rjweb/uws.png" style="padding-bottom:10px;" height="150">](https://www.npmjs.com/package/@rjweb/uws)
 
-Files in this "binaries" branch are all licensed under Apache License 2.0, despite some of them lacking a notice as per "APPENDIX: How to apply the Apache License to your work" of the Apache License 2.0.
+</div>
+
+## This is a fork of [uWebsockets.js](https://github.com/uNetworking/uWebSockets.js)
+### It includes all features and some basic changes
