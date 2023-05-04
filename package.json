@@ -1,12 +1,17 @@
 {
   "name": "@rjweb/uws",
   "version": "1.0.1",
+  "description": "Easy and Fast way to create a Webserver in NodeJS",
   "main": "uws.js",
   "types": "./index.d.ts",
+  "engines": {
+    "node": "16.x || 18.x || 20.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rotvproHD/uWebSockets.js.git"
   },
+  "author": "0x4096 (Robert Jansen) & Alex Hultman",
   "exports": {
     "import": "./ESM_wrapper.mjs",
     "require": "./uws.js",
