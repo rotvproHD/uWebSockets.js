@@ -333,11 +333,14 @@ export function App(options?: AppOptions) : TemplatedApp;
 /** Constructs an SSL app. See App. */
 export function SSLApp(options: AppOptions) : TemplatedApp;
 
+/** Free a Javascript Objects Memory */
+export function freeMemory(object: ArrayBuffer) : void;
+
 /** Closes a uSockets listen socket. */
-export function us_listen_socket_close(listenSocket: us_listen_socket) : void;
+export function closeSocket(listenSocket: us_listen_socket) : void;
 
 /** Gets local port of socket (or listenSocket) or -1. */
-export function us_socket_local_port(socket: us_socket) : number;
+export function getSocketPort(socket: us_socket) : number;
 
 export interface MultipartField {
     data: ArrayBuffer;
