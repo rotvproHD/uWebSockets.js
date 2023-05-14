@@ -22,8 +22,10 @@
 #include <iostream>
 #include <vector>
 #include <type_traits>
+#include <cstring>
 
 #include <v8.h>
+#include <node.h>
 using namespace v8;
 
 #include "Utilities.h"
@@ -331,6 +333,26 @@ void uWS_unlock(const FunctionCallbackInfo<Value> &args) {
     kvMutex.unlock();
 }
 
+void FreeMemory(const FunctionCallbackInfo<Value> &args) {
+    Isolate* isolate = args.GetIsolate();
+
+    if (args[0]->IsArrayBufferView()) {
+        auto arrayBufferView = args[0].As<ArrayBufferView>();
+        auto byteOffset = arrayBufferView->ByteOffset();
+        auto arrayBuffer = arrayBufferView->Buffer();
+
+        arrayBuffer->GetBackingStore().reset();
+
+        if (arrayBuffer->IsDetachable()) {
+            arrayBuffer->Detach();
+        }
+    } else if (args[0]->IsString()) {
+        String::Utf8Value str(isolate, args[0]);
+        char* bufferData = *str;
+        free(bufferData);
+    }
+}
+
 PerContextData *Main(Local<Object> exports) {
 
     /* We pass isolate everywhere */
@@ -349,6 +371,9 @@ PerContextData *Main(Local<Object> exports) {
 
     /* Refer to per context data via External */
     Local<External> externalPerContextData = External::New(isolate, perContextData);
+
+    /* utility functions */
+    exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "freeMemory", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, FreeMemory)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
 
     /* uWS namespace */
     exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "App", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_App<uWS::App>, externalPerContextData)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
@@ -375,9 +400,9 @@ PerContextData *Main(Local<Object> exports) {
     exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "_cfg", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_cfg)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
     exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "getParts", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_getParts)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
 
-    /* Expose some µSockets functions directly under uWS namespace */
-    exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "us_listen_socket_close", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_us_listen_socket_close)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
-    exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "us_socket_local_port", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_us_socket_local_port)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
+    /* Expose some µSockets functions */
+    exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "closeSocket", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_us_listen_socket_close)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
+    exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "getSocketPort", NewStringType::kNormal).ToLocalChecked(), FunctionTemplate::New(isolate, uWS_us_socket_local_port)->GetFunction(isolate->GetCurrentContext()).ToLocalChecked()).ToChecked();
 
     /* Compression enum */
     exports->Set(isolate->GetCurrentContext(), String::NewFromUtf8(isolate, "DISABLED", NewStringType::kNormal).ToLocalChecked(), Integer::NewFromUnsigned(isolate, uWS::DISABLED)).ToChecked();
@@ -410,7 +435,6 @@ PerContextData *Main(Local<Object> exports) {
 
 /* This is required when building as a Node.js addon */
 #ifndef ADDON_IS_HOST
-#include <node.h>
 extern "C" NODE_MODULE_EXPORT void
 NODE_MODULE_INITIALIZER(Local<Object> exports, Local<Value> module, Local<Context> context) {
     /* Integrate uSockets with existing libuv loop */
