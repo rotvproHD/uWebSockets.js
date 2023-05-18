@@ -8,4 +8,4 @@
 </div>
 
 ## This is a fork of [uWebsockets.js](https://github.com/uNetworking/uWebSockets.js)
-### It includes all features and some basic changes
+### It includes all features and some basic changes for rjweb-server
