@@ -346,10 +346,6 @@ void FreeMemory(const FunctionCallbackInfo<Value> &args) {
         if (arrayBuffer->IsDetachable()) {
             arrayBuffer->Detach();
         }
-    } else if (args[0]->IsString()) {
-        String::Utf8Value str(isolate, args[0]);
-        char* bufferData = *str;
-        free(bufferData);
     }
 }
 
