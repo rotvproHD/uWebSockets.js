@@ -24,10 +24,9 @@ function pump() {
 }
 
 function setup(uWS) {
-	if (process.env.ALIEN_UWS) {
-		guWS = uWS;
-		setImmediate(pump);
-	}
+	guWS = uWS;
+	setImmediate(pump);
+
 	return uWS;
 }
 
