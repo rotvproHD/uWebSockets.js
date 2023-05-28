@@ -454,8 +454,12 @@ PerContextData *Main(Local<Object> exports) {
 extern "C" NODE_MODULE_EXPORT void
 NODE_MODULE_INITIALIZER(Local<Object> exports, Local<Value> module, Local<Context> context) {
     /* Integrate uSockets with existing libuv loop */
-    us_loop = (struct us_loop_t *) uWS::Loop::get(nullptr);
-    us_loop_integrate(us_loop);
+    if (getenv("S_MODE")) {
+        us_loop = (struct us_loop_t *) uWS::Loop::get(nullptr);
+        us_loop_integrate(us_loop);
+    } else {
+        uWS::Loop::get(node::GetCurrentEventLoop(context->GetIsolate()));
+    }
 
     /* Register vanilla V8 addon */
     PerContextData *perContextData = Main(exports);

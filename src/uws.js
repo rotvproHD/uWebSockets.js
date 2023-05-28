@@ -24,9 +24,10 @@ function pump() {
 }
 
 function setup(uWS) {
-	guWS = uWS;
-	setImmediate(pump);
-
+	if (process.env.S_MODE) {
+		guWS = uWS;
+		setImmediate(pump);
+	}
 	return uWS;
 }
 
